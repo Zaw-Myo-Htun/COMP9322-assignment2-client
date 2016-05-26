@@ -16,14 +16,12 @@
 			<attribute name="owner.project.facets" value="jst.web"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/Zaw/Desktop/jersey-client-2.9.jar"/>
-	<classpathentry kind="lib" path="/Users/Zaw/Desktop/jersey-bundle-1.19.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/Zaw/Desktop/json-lib.jar"/>
 	<classpathentry kind="lib" path="/Users/Zaw/cs9322-Prac/workspace/COMP9322-assignment2-client/mysql-connector-java-5.1.36-bin.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jersey-bundle-1.19.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

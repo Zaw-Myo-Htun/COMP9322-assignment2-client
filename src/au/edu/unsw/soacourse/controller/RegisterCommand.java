@@ -7,6 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import au.edu.unsw.soacourse.dao.UserDao;
+import au.edu.unsw.soacourse.model.EmailRequestDTO;
 import au.edu.unsw.soacourse.model.RegistrationRequestDTO;
 
 import com.sun.jersey.api.client.Client;
@@ -17,48 +19,45 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.json.JSONConfiguration;
 
 public class RegisterCommand implements Command {
-
+	UserDao dao = new UserDao();
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("fdsf");
-		try {
-
-			RegistrationRequestDTO st = new RegistrationRequestDTO(1, "YAYYYA",
-					"sf");
-
+		String email = request.getParameter ("email"); 
+		String pwd = request.getParameter ("pass"); 
+		String name = request.getParameter("name"); 
+		
+		
+		
+		if(!dao.isEmailExist(email)) { 
+			EmailRequestDTO emailDTO = new EmailRequestDTO(); 
+			String emailLink = "Press the link to activate: http://localhost:8080/COMP9322—assn2–client/control?action=Activation&email="
+					+ email + "&name=" + name+ "&pwd=" + pwd; 
+			emailDTO.setEmail(email); 
+			emailDTO.setMessage("Please verify!\n" + emailLink); 
+			emailDTO.setSubject ("Verification");
 			ClientConfig clientConfig = new DefaultClientConfig();
-
 			clientConfig.getFeatures().put(
 					JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
 			Client client = Client.create(clientConfig);
-
 			WebResource webResource = client
-					.resource("http://localhost:8080/HelloWorldCxfRest/foundIT/registration");
+					.resource("http://localhost:8080/HelloWorldCxfRest/foundIT/email");
 			ClientResponse r = webResource.accept("application/json")
-					.type("application/json").post(ClientResponse.class, st);
-			if (response.getStatus() != 200) {
-
-				throw new RuntimeException("Failed : HTTP error code : "
-
-				+ r.getStatus());
-
+					.type("application/json").post(ClientResponse.class, emailDTO);
+			if (response.getStatus() != 201) {
+				request.setAttribute("isUserExist", "error");
+				RequestDispatcher rd = request.getRequestDispatcher("/reg.jsp"); 
+				rd.forward (request, response); 
+			}else{
+				request.setAttribute("isUserExist", "verify");
+				RequestDispatcher rd = request.getRequestDispatcher("/login.jsp"); 
+				rd.forward (request, response); 
 			}
-
-			String output = r.getEntity(String.class);
-
-			System.out.println("Server response .... \n");
-
-			System.out.println(output);
-		} catch (Exception e) {
-
-			e.printStackTrace();
-
+		}else{
+			request.setAttribute("isUserExist", "true");
+			RequestDispatcher rd = request.getRequestDispatcher("/reg.jsp"); 
+			rd.forward (request, response); 
 		}
-//	    	request.setAttribute("isUserExist", "true");
-//			RequestDispatcher rd = request.getRequestDispatcher("/reg.jsp");
-//			rd.forward(request, response);
-	    
 	}
 
 }

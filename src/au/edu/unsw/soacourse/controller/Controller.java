@@ -25,7 +25,7 @@ public class Controller extends HttpServlet {
 	private HashMap<Actions, Command> commands;
 
 	private enum Actions {
-		Register, AdminLogin
+		Register, AdminLogin,Activation,Login,ToEditProfile,EditProfile
 	};
 
 	public Controller() {
@@ -35,6 +35,10 @@ public class Controller extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		commands = new HashMap<Actions, Command>();
 		commands.put(Actions.Register, new RegisterCommand());
+		commands.put(Actions.Activation, new ActivationCommand());
+		commands.put(Actions.Login, new LoginCommand());
+		commands.put(Actions.ToEditProfile, new ToEditProfileCommand());
+		commands.put(Actions.EditProfile, new EditProfileCommand());
 
 	}
 
